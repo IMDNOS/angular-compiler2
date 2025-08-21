@@ -2,12 +2,12 @@ package html.DivChild;
 
 import html.Paragraph.ParagraphElement;
 
-public class ParagraphWrapper extends DivChild{
-    public html.Paragraph.ParagraphElement paragraph;
-    public ParagraphWrapper(html.Paragraph.ParagraphElement paragraph) {
+public class ParagraphWrapper extends DivChild {
+    private ParagraphElement paragraph;
+
+    public ParagraphWrapper(ParagraphElement paragraph) {
         this.paragraph = paragraph;
     }
-
 
     public ParagraphElement getParagraph() {
         return paragraph;
@@ -19,8 +19,6 @@ public class ParagraphWrapper extends DivChild{
 
     @Override
     public String toString() {
-        return
-                paragraph.toString()
-                ;
+        return paragraph.toString();
     }
 }

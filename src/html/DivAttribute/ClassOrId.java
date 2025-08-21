@@ -1,7 +1,8 @@
 package html.DivAttribute;
 
-public class ClassOrId extends DivAttribute{
-    public String attribute;
+public class ClassOrId extends DivAttribute {
+    private String attribute;
+
     public ClassOrId(String attribute) {
         this.attribute = attribute;
     }
@@ -16,7 +17,6 @@ public class ClassOrId extends DivAttribute{
 
     @Override
     public String toString() {
-        return  attribute + '\''
-                ;
+        return attribute;
     }
 }

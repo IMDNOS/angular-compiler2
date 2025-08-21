@@ -1,18 +1,13 @@
-package html;
-
-import html.DivAttribute.DivAttribute;
-import html.DivChild.DivChild;
+package html.DivChild;
 
 import java.util.List;
 
-public class DivNode extends DivChild {
+public class ButtonElement extends DivChild {
     private String id;
-    private List<DivAttribute> attributes;
     private List<DivChild> children;
 
-    public DivNode(String id, List<DivAttribute> attributes, List<DivChild> children) {
+    public ButtonElement(String id, List<DivChild> children) {
         this.id = id;
-        this.attributes = attributes;
         this.children = children;
     }
 
@@ -22,14 +17,6 @@ public class DivNode extends DivChild {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<DivAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<DivAttribute> attributes) {
-        this.attributes = attributes;
     }
 
     public List<DivChild> getChildren() {
@@ -42,9 +29,8 @@ public class DivNode extends DivChild {
 
     @Override
     public String toString() {
-        return "DivNode{" +
+        return "ButtonElement{" +
                 "id='" + id + '\'' +
-                ", attributes=" + attributes +
                 ", children=" + children +
                 '}';
     }

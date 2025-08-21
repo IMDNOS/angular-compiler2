@@ -3,11 +3,12 @@ package html;
 import java.util.List;
 
 public class Html {
-    public List<DivNode> divs;
-    public Html(List<DivNode> divs){
-        this.divs=divs;
+    private List<DivNode> divs;
 
+    public Html(List<DivNode> divs) {
+        this.divs = divs;
     }
+
     public List<DivNode> getDivs() {
         return divs;
     }
@@ -18,7 +19,7 @@ public class Html {
 
     @Override
     public String toString() {
-        return "{" +
+        return "Html{" +
                 "divs=" + divs +
                 '}';
     }

@@ -6,12 +6,9 @@ import java.util.regex.Pattern;
 import css.Css;
 import gen.AngularParser;
 import gen.AngularParserBaseVisitor;
-import html.DivChild.ParagraphWrapper;
 import html.DivNode;
 import html.Html;
-import html.HtmlSymbol;
 import html.HtmlSymbolTable;
-import org.antlr.v4.runtime.tree.ParseTree;
 import program.Program;
 import ts.*;
 import ts.expressions.Attribute;
@@ -85,11 +82,192 @@ public class AngularVisitor extends AngularParserBaseVisitor {
 
 //    <<<<<<<<<<<<<<<<<< Html
 
+//    @Override
+//    public Object visitHtmlOption(AngularParser.HtmlOptionContext ctx) {
+//        return visit(ctx.html());
+//    }
+//
+//
+//    @Override
+//    public Object visitHtml(AngularParser.HtmlContext ctx) {
+//        List<DivNode> divs = new ArrayList<>();
+//        for (AngularParser.DivContext divCtx : ctx.div()) {
+//            DivNode divNode = (DivNode) visit(divCtx);
+//            divs.add(divNode);
+//        }
+//        return new Html(divs);
+//    }
+//
+//
+//
+//    @Override
+//    public Object visitDivNode(AngularParser.DivNodeContext ctx) {
+//        String tagName = ctx.ID(0).getText();
+//        List<DivAttribute> attributes = new ArrayList<>();
+//
+//        if (!tagName.isEmpty() && Character.isUpperCase(tagName.charAt(0))) {
+//            Component currentComponent = componentTable.getComponentByClass(currentComponentName);
+//
+//            boolean isImported = currentComponent != null &&
+//                    (currentComponent.importsComponent(tagName) || componentTable.isImportedViaStatement(tagName));
+//
+//            if (!isImported) {
+//                errors.add("Semantic Error at line " + ctx.ID(0).getSymbol().getLine() +
+//                        ": Component '" + tagName + "' is not defined or imported.");
+//            }
+//        }
+//
+//        for (AngularParser.DivAttributeContext attrCtx : ctx.divAttribute()) {
+//            DivAttribute attr = (DivAttribute) visit(attrCtx);
+//            attributes.add(attr);
+//        }
+//
+//        List<DivChild> children = new ArrayList<>();
+//        for (AngularParser.DivChildContext childCtx : ctx.divChild()) {
+//            DivChild child = (DivChild) visit(childCtx);
+//            children.add(child);
+//        }
+//
+//        return new DivNode(tagName, attributes, children);
+//    }
+//
+//
+//    @Override
+//    public Object visitClassOrId(AngularParser.ClassOrIdContext ctx) {
+//        return new ClassOrId(ctx.ATTRIBUTE().getText());
+//    }
+//
+//    @Override
+//    public Object visitNgDirective(AngularParser.NgDirectiveContext ctx) {
+//        return new NgDirective(ctx.getText());
+//    }
+//
+//    @Override
+//    public Object visitEventBinding(AngularParser.EventBindingContext ctx) {
+//        return new EventBinding(ctx.getText());
+//    }
+//
+//
+//    @Override
+//    public Object visitBrTag(AngularParser.BrTagContext ctx) {
+//        AngularParser.BrContext brCtx = ctx.br();
+//
+//        String tagName = brCtx.getToken(AngularParser.ID, 0).getText();
+//        String binding = brCtx.getToken(AngularParser.ANGULAR_BINDING, 0).getText();
+//        scopeStack.push(tagName);
+//        String currentScope = String.join(" > ", scopeStack);
+//
+//        String attributes = brCtx.getText();
+//
+//        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+//        scopeStack.pop();
+//        checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
+//        return new BrTag(tagName, binding);
+//    }
+//
+//
+//    @Override
+//    public Object visitImageElement(AngularParser.ImageElementContext ctx) {
+//        AngularParser.ImageContext iCtx = ctx.image();
+//
+//        String tagName = iCtx.ID().getText();
+//        String property = iCtx.ANGULAR_ATTRIBUTE_PROPERTY().getText();
+//        scopeStack.push(tagName);
+//        String currentScope = String.join(" > ", scopeStack);
+//
+//        String attributes = iCtx.getText();
+//
+//        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+//         scopeStack.pop();
+//        Pattern pattern = Pattern.compile("\\[.*?\\]\\s*=\\s*\"(.*?)\"");
+//        Matcher matcher = pattern.matcher(property);
+//        if (matcher.find()) {
+//            String expression = matcher.group(1).trim();
+//            String[] parts = expression.split("\\.");
+//            String variableName = parts[0].trim();
+//
+//            if (symbolTable.findSymbol(variableName, scope) == null) {
+//                int line = ctx.getStart().getLine();
+//                String error = "Semantic Error at line " + line + ": Variable '" + variableName + "' is not defined in [src] binding.";
+//                errors.add(error);
+//            }
+//        }
+//        return new ImageElement(
+//                tagName,
+//                property
+//        );
+//    }
+//
+//
+//    @Override
+//    public Object visitNestedDiv(AngularParser.NestedDivContext ctx) {
+//        DivNode nested = (DivNode) visit(ctx.div());
+//        return new NestedDiv(nested);
+//    }
+//
+//    @Override
+//    public Object visitParagraphWrapper(AngularParser.ParagraphWrapperContext ctx) {
+//        html.Paragraph.ParagraphElement paragraph = (html.Paragraph.ParagraphElement) visit(ctx.paragraph());
+//        return new html.DivChild.ParagraphWrapper(paragraph);
+//    }
+//
+//    @Override
+//    public Object visitH_Element(AngularParser.H_ElementContext ctx) {
+//        AngularParser.HElementContext hCtx = ctx.hElement();
+//
+//        String tagName = hCtx.ID(0).getText();
+//        String binding=hCtx.ANGULAR_BINDING().getText();
+//        scopeStack.push(tagName);
+//        String currentScope = String.join(" > ", scopeStack);
+//
+//        String attributes = hCtx.getText();
+//        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+//        scopeStack.pop();
+//        checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
+//        return new H_Element(
+//                tagName,
+//                binding,
+//                hCtx.ID(1).getText()
+//        );
+//    }
+//
+//
+//
+//
+//    @Override
+//    public Object visitP_Element(AngularParser.P_ElementContext ctx) {
+//        AngularParser.PElementContext pCtx = ctx.pElement();
+//
+//        String tagName = "p";
+//        String binding=pCtx.ANGULAR_BINDING().getText();
+//        scopeStack.push(tagName);
+//        String currentScope = String.join(" > ", scopeStack);
+//
+//        String attributes = pCtx.getText();
+//        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+//        scopeStack.pop();
+//        checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
+//        return new P_Element(binding);
+//    }
+//
+    private void checkBindingForUndefinedVariable(String binding, int line) {
+        String expression = binding.replaceAll("\\{\\{", "").replaceAll("}}", "").trim();
+
+        String[] parts = expression.split("\\.");
+        String variableName = parts[0].trim();
+
+        if (symbolTable.findSymbol(variableName, scope) == null) {
+            String error = "Semantic Error at line " + line + ": Variable '" + variableName + "' is not defined.";
+            errors.add(error);
+        }
+    }
+
+    // ===================== HTML SECTION (UPDATED & MERGED) =====================
+
     @Override
     public Object visitHtmlOption(AngularParser.HtmlOptionContext ctx) {
         return visit(ctx.html());
     }
-
 
     @Override
     public Object visitHtml(AngularParser.HtmlContext ctx) {
@@ -101,30 +279,39 @@ public class AngularVisitor extends AngularParserBaseVisitor {
         return new Html(divs);
     }
 
-
-
     @Override
     public Object visitDivNode(AngularParser.DivNodeContext ctx) {
-        String tagName = ctx.ID(0).getText();
-        List<DivAttribute> attributes = new ArrayList<>();
+        // حسب القاعدة: div : < tagName divAttribute* > divChild* </ tagName >
+        String openTag = ctx.tagName(0).getText();
+        String closeTag = ctx.tagName(1).getText();
 
+        // فحص إغلاق الوسم
+        if (!openTag.equals(closeTag)) {
+            errors.add("Semantic Error at line " + ctx.getStart().getLine()
+                    + ": Mismatched closing tag. Expected </" + openTag + "> but found </" + closeTag + ">.");
+        }
+
+        String tagName = openTag;
+
+        // التحقق من الـ Component المستورد (نفس منطقك القديم)
         if (!tagName.isEmpty() && Character.isUpperCase(tagName.charAt(0))) {
             Component currentComponent = componentTable.getComponentByClass(currentComponentName);
-
             boolean isImported = currentComponent != null &&
                     (currentComponent.importsComponent(tagName) || componentTable.isImportedViaStatement(tagName));
-
             if (!isImported) {
-                errors.add("Semantic Error at line " + ctx.ID(0).getSymbol().getLine() +
+                errors.add("Semantic Error at line " + ctx.getStart().getLine() +
                         ": Component '" + tagName + "' is not defined or imported.");
             }
         }
 
+        // Attributes
+        List<DivAttribute> attributes = new ArrayList<>();
         for (AngularParser.DivAttributeContext attrCtx : ctx.divAttribute()) {
             DivAttribute attr = (DivAttribute) visit(attrCtx);
             attributes.add(attr);
         }
 
+        // Children
         List<DivChild> children = new ArrayList<>();
         for (AngularParser.DivChildContext childCtx : ctx.divChild()) {
             DivChild child = (DivChild) visit(childCtx);
@@ -134,20 +321,58 @@ public class AngularVisitor extends AngularParserBaseVisitor {
         return new DivNode(tagName, attributes, children);
     }
 
+// ---------------- ATTRIBUTES ----------------
 
     @Override
     public Object visitClassOrId(AngularParser.ClassOrIdContext ctx) {
+        // ATTRIBUTE token كامل (id="x" أو class="y"...)
         return new ClassOrId(ctx.ATTRIBUTE().getText());
     }
 
     @Override
     public Object visitNgDirective(AngularParser.NgDirectiveContext ctx) {
+        // *ngIf="..." أو *ngFor="..."
         return new NgDirective(ctx.getText());
     }
 
     @Override
     public Object visitEventBinding(AngularParser.EventBindingContext ctx) {
+        // (click)="..."
         return new EventBinding(ctx.getText());
+    }
+
+// ---------------- CHILDREN ----------------
+
+    @Override
+    public Object visitNestedDiv(AngularParser.NestedDivContext ctx) {
+        DivNode nested = (DivNode) visit(ctx.div());
+        return new NestedDiv(nested);
+    }
+
+    @Override
+    public Object visitImageElement(AngularParser.ImageElementContext ctx) {
+        AngularParser.ImageContext iCtx = ctx.image();
+        String tagName = iCtx.IMG().getText(); // "img"
+        String property = iCtx.ANGULAR_ATTRIBUTE_PROPERTY().getText();
+
+        scopeStack.push(tagName);
+        String currentScope = String.join(" > ", scopeStack);
+        htmlSymbolTable.addSymbol(tagName, iCtx.getText(), currentScope);
+        scopeStack.pop();
+
+        Pattern pattern = Pattern.compile("\\[.*?\\]\\s*=\\s*\"(.*?)\"");
+        Matcher matcher = pattern.matcher(property);
+        if (matcher.find()) {
+            String expression = matcher.group(1).trim();
+            String variableName = expression.split("\\.")[0].trim();
+
+            if (symbolTable.findSymbol(variableName, scope) == null) {
+                errors.add("Semantic Error at line " + ctx.getStart().getLine() +
+                        ": Variable '" + variableName + "' is not defined in property binding.");
+            }
+        }
+
+        return new ImageElement(tagName, property);
     }
 
 
@@ -155,57 +380,18 @@ public class AngularVisitor extends AngularParserBaseVisitor {
     public Object visitBrTag(AngularParser.BrTagContext ctx) {
         AngularParser.BrContext brCtx = ctx.br();
 
-        String tagName = brCtx.getToken(AngularParser.ID, 0).getText();
-        String binding = brCtx.getToken(AngularParser.ANGULAR_BINDING, 0).getText();
+        // حسب القاعدة: <br> {{ binding }}
+        String tagName = brCtx.BR().getText();                 // "br"
+        String binding  = brCtx.ANGULAR_BINDING().getText();   // "{{ ... }}"
+
         scopeStack.push(tagName);
         String currentScope = String.join(" > ", scopeStack);
-
         String attributes = brCtx.getText();
-
         htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
         scopeStack.pop();
+
         checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
         return new BrTag(tagName, binding);
-    }
-
-
-    @Override
-    public Object visitImageElement(AngularParser.ImageElementContext ctx) {
-        AngularParser.ImageContext iCtx = ctx.image();
-
-        String tagName = iCtx.ID().getText();
-        String property = iCtx.ANGULAR_ATTRIBUTE_PROPERTY().getText();
-        scopeStack.push(tagName);
-        String currentScope = String.join(" > ", scopeStack);
-
-        String attributes = iCtx.getText();
-
-        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
-         scopeStack.pop();
-        Pattern pattern = Pattern.compile("\\[.*?\\]\\s*=\\s*\"(.*?)\"");
-        Matcher matcher = pattern.matcher(property);
-        if (matcher.find()) {
-            String expression = matcher.group(1).trim();
-            String[] parts = expression.split("\\.");
-            String variableName = parts[0].trim();
-
-            if (symbolTable.findSymbol(variableName, scope) == null) {
-                int line = ctx.getStart().getLine();
-                String error = "Semantic Error at line " + line + ": Variable '" + variableName + "' is not defined in [src] binding.";
-                errors.add(error);
-            }
-        }
-        return new ImageElement(
-                tagName,
-                property
-        );
-    }
-
-
-    @Override
-    public Object visitNestedDiv(AngularParser.NestedDivContext ctx) {
-        DivNode nested = (DivNode) visit(ctx.div());
-        return new NestedDiv(nested);
     }
 
     @Override
@@ -218,52 +404,88 @@ public class AngularVisitor extends AngularParserBaseVisitor {
     public Object visitH_Element(AngularParser.H_ElementContext ctx) {
         AngularParser.HElementContext hCtx = ctx.hElement();
 
-        String tagName = hCtx.ID(0).getText();
-        String binding=hCtx.ANGULAR_BINDING().getText();
+        // <hX> {{binding}} </hX>
+        String tagName = hCtx.heading(0).getText();            // H1..H6 token -> "h1".."h6"
+        String binding  = hCtx.ANGULAR_BINDING().getText();
+
         scopeStack.push(tagName);
         String currentScope = String.join(" > ", scopeStack);
-
         String attributes = hCtx.getText();
         htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
         scopeStack.pop();
+
         checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
-        return new H_Element(
-                tagName,
-                binding,
-                hCtx.ID(1).getText()
-        );
+        return new H_Element(tagName, binding);
     }
-
-
-
 
     @Override
     public Object visitP_Element(AngularParser.P_ElementContext ctx) {
         AngularParser.PElementContext pCtx = ctx.pElement();
 
-        String tagName = "p";
-        String binding=pCtx.ANGULAR_BINDING().getText();
+        String tagName = pCtx.P().get(0).getText();                    // "p"
+        String binding  = pCtx.ANGULAR_BINDING().getText();
+
         scopeStack.push(tagName);
         String currentScope = String.join(" > ", scopeStack);
-
         String attributes = pCtx.getText();
         htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
         scopeStack.pop();
+
         checkBindingForUndefinedVariable(binding, ctx.getStart().getLine());
         return new P_Element(binding);
     }
 
-    private void checkBindingForUndefinedVariable(String binding, int line) {
-        String expression = binding.replaceAll("\\{\\{", "").replaceAll("}}", "").trim();
-
-        String[] parts = expression.split("\\.");
-        String variableName = parts[0].trim();
-
-        if (symbolTable.findSymbol(variableName, scope) == null) {
-            String error = "Semantic Error at line " + line + ": Variable '" + variableName + "' is not defined.";
-            errors.add(error);
-        }
+    // divChild -> buttonElement #ButtonElem
+    @Override
+    public Object visitButtonElem(AngularParser.ButtonElemContext ctx) {
+        return visit(ctx.buttonElement());
     }
+
+    @Override
+    public Object visitLabelElem(AngularParser.LabelElemContext ctx) {
+        return visit(ctx.labelElement());
+    }
+
+    @Override
+    public Object visitButtonElement(AngularParser.ButtonElementContext ctx) {
+        // <button> divChild* </button>
+        String tagName = ctx.BUTTON().get(0).getText(); // "button"
+
+        List<DivChild> children = new ArrayList<>();
+        for (AngularParser.DivChildContext c : ctx.divChild()) {
+            children.add((DivChild) visit(c));
+        }
+
+        scopeStack.push(tagName);
+        String currentScope = String.join(" > ", scopeStack);
+        String attributes = ctx.getText();
+        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+        scopeStack.pop();
+
+        return new ButtonElement(tagName, children);
+    }
+
+    @Override
+    public Object visitLabelElement(AngularParser.LabelElementContext ctx) {
+        // <label> divChild* </label>
+        String tagName = ctx.LABEL().get(0).getText(); // "label"
+
+        List<DivChild> children = new ArrayList<>();
+        for (AngularParser.DivChildContext c : ctx.divChild()) {
+            children.add((DivChild) visit(c));
+        }
+
+        scopeStack.push(tagName);
+        String currentScope = String.join(" > ", scopeStack);
+        String attributes = ctx.getText();
+        htmlSymbolTable.addSymbol(tagName, attributes, currentScope);
+        scopeStack.pop();
+
+        return new LabelElement(tagName, children);
+    }
+
+// =================== END HTML SECTION (UPDATED & MERGED) ====================
+
 
     //>>>>>>>>>>>>>>>>>>>>>>
 //    <<<<<<<<<<<<<<<<<<<< Typescript

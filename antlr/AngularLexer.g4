@@ -92,10 +92,23 @@ ANGULAR_BINDING   : '{{' .*? '}}';              // {{ selectedProduct.name }}
 
 //Html
 
+H1 : 'h1';
+H2 : 'h2';
+H3 : 'h3';
+H4 : 'h4';
+H5 : 'h5';
+H6 : 'h6';
+IMG : 'img';
+BR : 'br';
 P : 'p';
+DIV : 'div';
+BUTTON : 'button';
+LABEL : 'label';
+
 TAG_OPEN : '<';
 TAG_CLOSE : '>';
 TAG_OPEN_SELF : '</';
+TAG_SELF_CLOSE: '/>';
 ATTRIBUTE : ID EQUAL_SIGN STRING;
 ANGULAR_ATTRIBUTE_DIRECTIVE : ANGULAR_DIRECTIVE EQUAL_SIGN STRING ;
 ANGULAR_ATTRIBUTE_PROPERTY : ANGULAR_PROPERTY EQUAL_SIGN STRING ;

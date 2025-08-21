@@ -1,7 +1,7 @@
 package html.Paragraph;
 
-public class P_Element extends ParagraphElement{
-    public String binding;
+public class P_Element extends ParagraphElement {
+    private String binding;
 
     public P_Element(String binding) {
         this.binding = binding;
@@ -17,7 +17,7 @@ public class P_Element extends ParagraphElement{
 
     @Override
     public String toString() {
-        return "PElement{" +
+        return "P_Element{" +
                 "binding='" + binding + '\'' +
                 '}';
     }

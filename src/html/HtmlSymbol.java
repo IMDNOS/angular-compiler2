@@ -1,9 +1,9 @@
 package html;
 
 public class HtmlSymbol {
-    String name;
-    String attribute;   // Attributes
-    String scope;
+    private String name;
+    private String attribute;
+    private String scope;
 
     public HtmlSymbol(String name, String attribute, String scope) {
         this.name = name;

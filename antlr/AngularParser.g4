@@ -83,15 +83,26 @@ componentList
       ;
 
 // <<<<< HTML parser
-
 html
-    : div+ ;
+    : div* ;
 
 div
-    : TAG_OPEN ID divAttribute* TAG_CLOSE
+    : TAG_OPEN tagName divAttribute* TAG_CLOSE
       divChild*
-      TAG_OPEN_SELF ID TAG_CLOSE        #DivNode
+      TAG_OPEN_SELF tagName TAG_CLOSE        #DivNode
     ;
+
+tagName
+    : DIV
+    | P
+    | IMG
+    | BR
+    | H1 | H2 | H3 | H4 | H5 | H6
+    | BUTTON
+    | LABEL
+    | ID
+    ;
+
 
 divAttribute
     : ng                      #NgDirective
@@ -99,13 +110,22 @@ divAttribute
     | ATTRIBUTE               #ClassOrId
     ;
 
+
 divChild
-    : div                               #NestedDiv
-    | image                             #ImageElement
+    : image                             #ImageElement
+    | div                               #NestedDiv
     | paragraph                         #ParagraphWrapper
     | br                                #BrTag
-
+    | buttonElement                     #ButtonElem
+    | labelElement                      #LabelElem
     ;
+
+image
+    : TAG_OPEN IMG ANGULAR_ATTRIBUTE_PROPERTY TAG_CLOSE
+    | TAG_OPEN IMG ANGULAR_ATTRIBUTE_PROPERTY TAG_SELF_CLOSE   // يسمح <img .../>
+    ;
+
+
 
 paragraph
     : hElement                    #H_Element
@@ -113,20 +133,37 @@ paragraph
     ;
 
 hElement
-    : TAG_OPEN ID TAG_CLOSE ANGULAR_BINDING TAG_OPEN_SELF ID TAG_CLOSE
+    : TAG_OPEN heading TAG_CLOSE ANGULAR_BINDING TAG_OPEN_SELF heading TAG_CLOSE
     ;
+
+heading
+    : H1
+    | H2
+    | H3
+    | H4
+    | H5
+    | H6
+    ;
+
 
 pElement
     : TAG_OPEN P TAG_CLOSE ANGULAR_BINDING TAG_OPEN_SELF P TAG_CLOSE
     ;
 
-image
-    : TAG_OPEN ID ANGULAR_ATTRIBUTE_PROPERTY TAG_CLOSE
-    ;
 
 br
-    : TAG_OPEN ID TAG_CLOSE ANGULAR_BINDING
+    : TAG_OPEN BR TAG_CLOSE ANGULAR_BINDING
     ;
+
+buttonElement
+    : TAG_OPEN BUTTON TAG_CLOSE divChild* TAG_OPEN_SELF BUTTON TAG_CLOSE
+    ;
+
+
+labelElement
+    : TAG_OPEN LABEL TAG_CLOSE divChild* TAG_OPEN_SELF LABEL TAG_CLOSE
+    ;
+
 
 ng
     : ANGULAR_ATTRIBUTE_DIRECTIVE
@@ -135,6 +172,7 @@ ng
 event
     : ANGULAR_ATTRIBUTE_EVENT
     ;
+
 
 // <<<<<<<<<<<<< css parser
 

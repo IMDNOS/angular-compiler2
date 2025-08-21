@@ -3,7 +3,7 @@ package html;
 import java.util.ArrayList;
 
 public class HtmlSymbolTable {
-    ArrayList<HtmlSymbol> symbols;
+    private ArrayList<HtmlSymbol> symbols;
 
     public HtmlSymbolTable() {
         symbols = new ArrayList<>();
@@ -18,8 +18,8 @@ public class HtmlSymbolTable {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format(" %-26s │ %-85s │ %-85s \n", "Name", "Attribute", "Scope"));
-
         sb.append("────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
+
         for (HtmlSymbol symbol : symbols) {
             sb.append(String.format("  %-26s │ %-85s │ %-85s \n",
                     symbol.getName(),
@@ -27,10 +27,6 @@ public class HtmlSymbolTable {
                     symbol.getScope()));
         }
 
-
         return sb.toString();
     }
-
-
-
 }

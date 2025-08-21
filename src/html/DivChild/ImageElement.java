@@ -1,8 +1,9 @@
 package html.DivChild;
 
-public class ImageElement extends DivChild{
-    public String id;
-    public String attribute;
+public class ImageElement extends DivChild {
+    private String id;
+    private String attribute;
+
     public ImageElement(String id, String attribute) {
         this.id = id;
         this.attribute = attribute;
@@ -26,7 +27,9 @@ public class ImageElement extends DivChild{
 
     @Override
     public String toString() {
-        return "id='" + id + '\'' +
-                ", attribute='" + attribute + '\'';
+        return "ImageElement{" +
+                "id='" + id + '\'' +
+                ", attribute='" + attribute + '\'' +
+                '}';
     }
 }

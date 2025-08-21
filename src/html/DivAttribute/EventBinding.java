@@ -1,8 +1,8 @@
 package html.DivAttribute;
 
-public class EventBinding extends DivAttribute{
+public class EventBinding extends DivAttribute {
+    private String event;
 
-    public String event;
     public EventBinding(String event) {
         this.event = event;
     }
@@ -17,6 +17,6 @@ public class EventBinding extends DivAttribute{
 
     @Override
     public String toString() {
-        return event + '\'' ;
+        return event;
     }
 }

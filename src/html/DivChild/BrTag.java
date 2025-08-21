@@ -1,8 +1,9 @@
 package html.DivChild;
 
-public class BrTag extends DivChild{
-    public String id;
-    public String binding;
+public class BrTag extends DivChild {
+    private String id;
+    private String binding;
+
     public BrTag(String id, String binding) {
         this.id = id;
         this.binding = binding;
@@ -26,7 +27,9 @@ public class BrTag extends DivChild{
 
     @Override
     public String toString() {
-        return "id='" + id + '\'' +
-                ", binding='" + binding + '\'';
+        return "BrTag{" +
+                "id='" + id + '\'' +
+                ", binding='" + binding + '\'' +
+                '}';
     }
 }
